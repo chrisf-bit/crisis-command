@@ -1,0 +1,367 @@
+@import "tailwindcss";
+
+/* ── THEME ── */
+@theme {
+  --color-void: #0a0e17;
+  --color-abyss: #0d1220;
+  --color-slate-deep: #131a2b;
+  --color-slate-mid: #1c2640;
+  --color-cyan-glow: #00e5ff;
+  --color-cyan-dim: #0097a7;
+  --color-amber-glow: #ffab00;
+  --color-amber-dim: #c67c00;
+  --color-magenta-glow: #ff006e;
+  --color-green-glow: #00e676;
+  --color-red-glow: #ff1744;
+  --color-purple-glow: #b388ff;
+
+  --font-display: "Orbitron", sans-serif;
+  --font-heading: "Rajdhani", sans-serif;
+  --font-body: "Source Sans 3", sans-serif;
+}
+
+/* ── BASE ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-void);
+  color: #e0e6f0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── ANIMATED GRID ── */
+@keyframes grid-drift {
+  0% { background-position: 0px 0px; }
+  100% { background-position: 60px 60px; }
+}
+
+.animated-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: grid-drift 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── SCANLINES ── */
+@keyframes scanline-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 4px; }
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px
+  );
+  animation: scanline-scroll 0.2s linear infinite;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ── RADIAL GLOW ── */
+.radial-glow {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 80vh;
+  background: radial-gradient(ellipse at center, rgba(0, 229, 255, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+/* ══════════════════════════════════════════
+   KEYFRAMES
+   ══════════════════════════════════════════ */
+
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(20% 0 60% 0); transform: translate(-3px, 1px); }
+  40% { clip-path: inset(40% 0 30% 0); transform: translate(3px, -1px); }
+  60% { clip-path: inset(60% 0 10% 0); transform: translate(-2px, 2px); }
+  80% { clip-path: inset(10% 0 70% 0); transform: translate(2px, -2px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(60% 0 10% 0); transform: translate(3px, -1px); }
+  40% { clip-path: inset(10% 0 70% 0); transform: translate(-3px, 1px); }
+  60% { clip-path: inset(30% 0 40% 0); transform: translate(2px, 2px); }
+  80% { clip-path: inset(70% 0 5% 0); transform: translate(-2px, -2px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0,229,255,0.3), 0 0 40px rgba(0,229,255,0.1); }
+  50% { box-shadow: 0 0 30px rgba(0,229,255,0.5), 0 0 60px rgba(0,229,255,0.2); }
+}
+
+.btn-pulse { animation: pulse-glow 2s ease-in-out infinite; }
+
+@keyframes float-up {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+
+.float-number { animation: float-up 1.5s ease-out forwards; }
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  10% { opacity: 0.8; }
+  20% { opacity: 1; }
+  30% { opacity: 0.6; }
+  40% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes border-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes particle-float {
+  0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+  25% { transform: translate(15px, -25px); opacity: 0.7; }
+  50% { transform: translate(-10px, -50px); opacity: 0.4; }
+  75% { transform: translate(20px, -25px); opacity: 0.6; }
+}
+
+@keyframes scan-sweep {
+  0% { top: -2px; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes hud-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes hud-rotate-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.countdown-mono {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
+.decision-card { transition: all 0.2s ease; }
+.decision-card:hover { transform: translateY(-4px); }
+
+
+/* ══════════════════════════════════════════
+   HUD SYSTEM — SCI-FI CONTROL PANEL
+   ══════════════════════════════════════════ */
+
+.hud-grid {
+  display: grid;
+  grid-template-rows: 48px 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-areas:
+    "status  status    status"
+    "comms   inputs    kpi"
+    "comms   scenarios kpi";
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  z-index: 10;
+  padding: 6px;
+  gap: 4px;
+}
+
+.hud-status    { grid-area: status; }
+.hud-comms     { grid-area: comms; }
+.hud-inputs    { grid-area: inputs; }
+.hud-scenarios { grid-area: scenarios; }
+.hud-kpi       { grid-area: kpi; }
+
+/* ── PANEL BASE — no clip-path, SVG PanelFrame handles decoration ── */
+.hud-panel {
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(0, 229, 255, 0.03) 0%, transparent 50%),
+    linear-gradient(225deg, rgba(0, 229, 255, 0.015) 0%, transparent 50%),
+    rgba(10, 14, 23, 0.85);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  border: 1px solid rgba(0, 229, 255, 0.08);
+}
+
+/* Inner vignette — depth effect */
+.hud-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.3) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── STATUS BAR — bottom glow edge ── */
+.hud-status {
+  border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.hud-status::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.5) 20%, rgba(0, 229, 255, 0.8) 50%, rgba(0, 229, 255, 0.5) 80%, transparent);
+  animation: border-pulse 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* ── SCAN LINE — horizontal sweep across panel ── */
+.hud-panel-scan::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0, 229, 255, 0.12) 20%,
+    rgba(0, 229, 255, 0.2) 50%,
+    rgba(0, 229, 255, 0.12) 80%,
+    transparent
+  );
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.08), 0 0 20px rgba(0, 229, 255, 0.04);
+  animation: scan-sweep 6s linear infinite;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Stagger scan lines across panels */
+.hud-comms.hud-panel-scan::before      { animation-delay: 0s; }
+.hud-inputs.hud-panel-scan::before     { animation-delay: -1.5s; }
+.hud-scenarios.hud-panel-scan::before  { animation-delay: -3s; }
+.hud-kpi.hud-panel-scan::before        { animation-delay: -4.5s; }
+
+/* ── NOISE TEXTURE OVERLAY ── */
+.hud-panel-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  filter: url(#hud-noise);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── PANEL HEADER — label with extending glow line ── */
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+}
+
+.panel-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.3), transparent);
+}
+
+/* ── HUD OUTER CORNER BRACKETS ── */
+.hud-frame {
+  position: relative;
+}
+
+.hud-frame::before,
+.hud-frame::after {
+  content: '';
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.hud-frame::before {
+  top: 0;
+  left: 0;
+  border-top: 2px solid rgba(0, 229, 255, 0.5);
+  border-left: 2px solid rgba(0, 229, 255, 0.5);
+}
+
+.hud-frame::after {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid rgba(0, 229, 255, 0.5);
+  border-right: 2px solid rgba(0, 229, 255, 0.5);
+}
+
+
+/* ── GRID-GAP CONNECTOR LINES ── */
+.hud-connector {
+  pointer-events: none;
+  z-index: 15;
+}
+
+.hud-connector-h {
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0, 229, 255, 0.06) 10%,
+    rgba(0, 229, 255, 0.1) 50%,
+    rgba(0, 229, 255, 0.06) 90%,
+    transparent
+  );
+}
+
+
+/* ══════════════════════════════════════════
+   ARC GAUGE — SVG-based, styles in component
+   Old power-gauge CSS removed (replaced by SVG arcs)
+   ══════════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════════
+   COMMS MESSAGE TYPES
+   ══════════════════════════════════════════ */
+
+.comm-alert   { border-left-color: #ff1744; }
+.comm-intel   { border-left-color: #00e5ff; }
+.comm-outcome { border-left-color: #00e676; }
+.comm-system  { border-left-color: #b388ff; }
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
