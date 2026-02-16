@@ -348,7 +348,7 @@ export default function App() {
             transition={pageTransition}
             className="absolute inset-0 z-10 flex flex-col items-center justify-center px-8"
           >
-            <div className="flex flex-col items-center gap-6 max-w-5xl w-full">
+            <div className="flex flex-col items-center gap-6">
               {/* Title */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -361,19 +361,18 @@ export default function App() {
               </motion.div>
 
               {/* Main content — scores + radar */}
-              <div className="flex flex-col md:flex-row items-center gap-8 w-full">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8">
                 {/* Radar chart */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.4, duration: 0.8 }}
-                  className="flex-shrink-0"
                 >
                   <RadarChart values={kpis} size={260} />
                 </motion.div>
 
                 {/* Final scores */}
-                <div className="flex-1 flex flex-col gap-4">
+                <div className="flex flex-col gap-4">
                   {(Object.keys(kpiMeta) as KPIKey[]).map((key, i) => {
                     const band = getPerformanceBand(kpis[key])
                     return (

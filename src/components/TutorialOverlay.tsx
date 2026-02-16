@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, type RefObject } from 'react'
+import { useState, useEffect, useCallback, useRef, type RefObject } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { tutorialSteps, type TutorialStep } from '../data/tutorialData'
 
@@ -107,8 +107,17 @@ export function TutorialOverlay({ step, panelRefs, onNext, onSkip }: TutorialOve
     setRect({ top: r.top, left: r.left, width: r.width, height: r.height })
   }, [currentStep.target, panelRefs])
 
-  // Measure on mount and step change
+  // Measure on mount and step change (delay on first step to let HUD animate in)
+  const hasSettled = useRef(false)
   useEffect(() => {
+    if (!hasSettled.current) {
+      // Wait for HUD entrance animation (500ms) before first measurement
+      const timer = setTimeout(() => {
+        hasSettled.current = true
+        measureTarget()
+      }, 550)
+      return () => clearTimeout(timer)
+    }
     measureTarget()
   }, [measureTarget])
 
