@@ -11,6 +11,7 @@ import CommsFeed from './components/CommsFeed'
 import KPIPanel from './components/KPIPanel'
 import ResourceAllocator from './components/ResourceAllocator'
 import MainPanel from './components/MainPanel'
+import TrendChart from './components/TrendChart'
 import { TutorialPrompt, TutorialOverlay } from './components/TutorialOverlay'
 import { tutorialSteps } from './data/tutorialData'
 import { useResourceAllocator } from './hooks/useResourceAllocator'
@@ -64,6 +65,7 @@ export default function App() {
   const [phase, setPhase] = useState<Phase>('title')
   const [roundIndex, setRoundIndex] = useState(0)
   const [kpis, setKpis] = useState<KPIValues>({ ...initialKPIs })
+  const [history, setHistory] = useState<KPIValues[]>([{ ...initialKPIs }])
   const [choices, setChoices] = useState<string[]>([])
   const [selectedOption, setSelectedOption] = useState<Option | null>(null)
   const [impacts, setImpacts] = useState<KPIValues | null>(null)
@@ -162,12 +164,14 @@ export default function App() {
     setImpacts(multipliedImpact)
     impactKey.current++
 
-    setKpis((prev) => ({
-      reputation: clampKPI(prev.reputation + multipliedImpact.reputation),
-      revenue: clampKPI(prev.revenue + multipliedImpact.revenue),
-      morale: clampKPI(prev.morale + multipliedImpact.morale),
-      regulatory: clampKPI(prev.regulatory + multipliedImpact.regulatory),
-    }))
+    const newKpis: KPIValues = {
+      reputation: clampKPI(kpis.reputation + multipliedImpact.reputation),
+      revenue: clampKPI(kpis.revenue + multipliedImpact.revenue),
+      morale: clampKPI(kpis.morale + multipliedImpact.morale),
+      regulatory: clampKPI(kpis.regulatory + multipliedImpact.regulatory),
+    }
+    setKpis(newKpis)
+    setHistory((prev) => [...prev, newKpis])
     setChoices((prev) => [...prev, option.id])
 
     comms.addMessage('COMMAND', `Decision: ${option.title}`, 'system')
@@ -202,6 +206,7 @@ export default function App() {
     setPhase('title')
     setRoundIndex(0)
     setKpis({ ...initialKPIs })
+    setHistory([{ ...initialKPIs }])
     setChoices([])
     setSelectedOption(null)
     setImpacts(null)
@@ -318,6 +323,7 @@ export default function App() {
                   impacts={impacts}
                   impactKey={impactKey.current}
                   showRadar={true}
+                  history={history}
                 />
               }
             >
@@ -360,50 +366,61 @@ export default function App() {
                 </h1>
               </motion.div>
 
-              {/* Main content — scores + radar */}
-              <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-                {/* Radar chart */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4, duration: 0.8 }}
-                >
-                  <RadarChart values={kpis} size={260} />
-                </motion.div>
+              {/* Main content — radar + scores + trend */}
+              <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+                  {/* Radar chart with historical overlays */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4, duration: 0.8 }}
+                  >
+                    <RadarChart values={kpis} size={240} history={history.slice(0, -1)} />
+                  </motion.div>
 
-                {/* Final scores */}
-                <div className="flex flex-col gap-4">
-                  {(Object.keys(kpiMeta) as KPIKey[]).map((key, i) => {
-                    const band = getPerformanceBand(kpis[key])
-                    return (
-                      <motion.div
-                        key={key}
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.6 + i * 0.15, duration: 0.5 }}
-                        className="flex items-center gap-4"
-                      >
-                        <span
-                          className="font-display text-3xl font-black w-16 text-right"
-                          style={{ color: kpiMeta[key].color }}
+                  {/* Final scores */}
+                  <div className="flex flex-col gap-4">
+                    {(Object.keys(kpiMeta) as KPIKey[]).map((key, i) => {
+                      const band = getPerformanceBand(kpis[key])
+                      return (
+                        <motion.div
+                          key={key}
+                          initial={{ opacity: 0, x: 30 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.6 + i * 0.15, duration: 0.5 }}
+                          className="flex items-center gap-4"
                         >
-                          {kpis[key]}
-                        </span>
-                        <div className="flex flex-col">
-                          <span className="font-heading text-sm tracking-wider" style={{ color: 'rgba(224,230,240,0.6)' }}>
-                            {kpiMeta[key].label}
-                          </span>
                           <span
-                            className="font-display text-xs font-bold tracking-widest uppercase"
-                            style={{ color: band.color }}
+                            className="font-display text-3xl font-black w-16 text-right"
+                            style={{ color: kpiMeta[key].color }}
                           >
-                            {band.label}
+                            {kpis[key]}
                           </span>
-                        </div>
-                      </motion.div>
-                    )
-                  })}
+                          <div className="flex flex-col">
+                            <span className="font-heading text-sm tracking-wider" style={{ color: 'rgba(224,230,240,0.6)' }}>
+                              {kpiMeta[key].label}
+                            </span>
+                            <span
+                              className="font-display text-xs font-bold tracking-widest uppercase"
+                              style={{ color: band.color }}
+                            >
+                              {band.label}
+                            </span>
+                          </div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
                 </div>
+
+                {/* Trend chart */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.0, duration: 0.6 }}
+                >
+                  <TrendChart history={history} width={480} height={110} />
+                </motion.div>
               </div>
 
               {/* Profile */}

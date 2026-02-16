@@ -5,9 +5,10 @@ import { kpiMeta, type KPIKey } from '../data/gameData'
 interface RadarChartProps {
   values: KPIValues
   size?: number
+  history?: KPIValues[]
 }
 
-export default function RadarChart({ values, size = 280 }: RadarChartProps) {
+export default function RadarChart({ values, size = 280, history }: RadarChartProps) {
   const [scale, setScale] = useState(0)
   const center = size / 2
   const maxR = size / 2 - 40
@@ -66,6 +67,27 @@ export default function RadarChart({ values, size = 280 }: RadarChartProps) {
             y2={center + maxR * Math.sin(angle)}
             stroke="rgba(255,255,255,0.06)"
             strokeWidth="1"
+          />
+        )
+      })}
+
+      {/* Historical layers */}
+      {history && history.map((snapshot, layerIndex) => {
+        const layerPoints = keys
+          .map((_, i) => getPoint(i, snapshot[keys[i]]))
+          .map(([x, y]) => `${x},${y}`)
+          .join(' ')
+        const opacity = 0.15 + (layerIndex / Math.max(history.length - 1, 1)) * 0.25
+        const strokeOpacity = 0.3 + (layerIndex / Math.max(history.length - 1, 1)) * 0.4
+        return (
+          <polygon
+            key={`history-${layerIndex}`}
+            points={layerPoints}
+            fill={`rgba(0, 229, 255, ${(opacity * 0.3).toFixed(3)})`}
+            stroke={`rgba(0, 229, 255, ${strokeOpacity.toFixed(2)})`}
+            strokeWidth="1"
+            strokeDasharray="4 2"
+            style={{ transition: 'all 1.5s cubic-bezier(0.33, 1, 0.68, 1)' }}
           />
         )
       })}

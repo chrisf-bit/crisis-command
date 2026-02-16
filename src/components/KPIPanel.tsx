@@ -1,6 +1,7 @@
 import KPIGauge from './KPIGauge'
 import FloatingNumber from './FloatingNumber'
 import RadarChart from './RadarChart'
+import Sparkline from './Sparkline'
 import { kpiMeta, type KPIValues, type KPIKey } from '../data/gameData'
 
 interface KPIPanelProps {
@@ -8,11 +9,12 @@ interface KPIPanelProps {
   impacts: KPIValues | null
   impactKey: number
   showRadar?: boolean
+  history?: KPIValues[]
 }
 
 const keys = Object.keys(kpiMeta) as KPIKey[]
 
-export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true }: KPIPanelProps) {
+export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, history }: KPIPanelProps) {
   return (
     <div className="flex flex-col items-center p-4 gap-2 h-full">
       {/* Header with extending line */}
@@ -43,6 +45,12 @@ export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true }:
               color={kpiMeta[key].color}
               size={120}
             />
+            {history && history.length > 1 && (
+              <Sparkline
+                data={history.map((h) => h[key])}
+                color={kpiMeta[key].color}
+              />
+            )}
           </div>
         ))}
       </div>
