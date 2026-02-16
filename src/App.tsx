@@ -419,7 +419,7 @@ export default function App() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.0, duration: 0.6 }}
                 >
-                  <TrendChart history={history} width={480} height={110} />
+                  <TrendChart history={history} width={500} height={150} />
                 </motion.div>
               </div>
 
