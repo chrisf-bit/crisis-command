@@ -89,6 +89,7 @@ interface SpotlightRect {
 
 export function TutorialOverlay({ step, panelRefs, onNext, onSkip }: TutorialOverlayProps) {
   const [rect, setRect] = useState<SpotlightRect | null>(null)
+  const [ready, setReady] = useState(false)
   const currentStep: TutorialStep = tutorialSteps[step]
   const isLast = step === tutorialSteps.length - 1
 
@@ -115,6 +116,7 @@ export function TutorialOverlay({ step, panelRefs, onNext, onSkip }: TutorialOve
       const timer = setTimeout(() => {
         hasSettled.current = true
         measureTarget()
+        setReady(true)
       }, 550)
       return () => clearTimeout(timer)
     }
@@ -177,6 +179,8 @@ export function TutorialOverlay({ step, panelRefs, onNext, onSkip }: TutorialOve
       left: Math.max(pad, rect.left - pad - 320),
     }
   }
+
+  if (!ready) return null
 
   return (
     <div className="fixed inset-0 z-[100]" style={{ pointerEvents: 'auto' }}>
