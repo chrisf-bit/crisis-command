@@ -8,15 +8,11 @@ interface KPIPanelProps {
   impacts: KPIValues | null
   impactKey: number
   showRadar?: boolean
-  history?: KPIValues[]
-  onShowTrends?: () => void
 }
 
 const keys = Object.keys(kpiMeta) as KPIKey[]
 
-export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, history, onShowTrends }: KPIPanelProps) {
-  const hasTrend = history && history.length > 1
-
+export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true }: KPIPanelProps) {
   return (
     <div className="flex flex-col items-center p-4 gap-2 h-full">
       {/* Header with extending line */}
@@ -29,7 +25,7 @@ export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, h
         </span>
       </div>
 
-      {/* Gauges */}
+      {/* Gauges — 70% of available height */}
       <div className="flex flex-col items-center justify-center gap-1" style={{ flex: '7 1 0%' }}>
         {keys.map((key) => (
           <div key={key} className="relative flex flex-col items-center">
@@ -51,23 +47,12 @@ export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, h
         ))}
       </div>
 
-      {/* Bottom section — radar + trends button */}
-      <div className="flex flex-col items-center gap-2" style={{ flex: '3 1 0%' }}>
-        {showRadar && (
-          <div className="flex items-center justify-center flex-1">
-            <RadarChart values={kpis} size={160} />
-          </div>
-        )}
-        {hasTrend && onShowTrends && (
-          <button
-            onClick={onShowTrends}
-            className="px-4 py-1.5 rounded-md border border-cyan-glow/30 bg-cyan-glow/5 font-display text-[10px] tracking-[0.2em] uppercase text-cyan-glow cursor-pointer hover:bg-cyan-glow/15 transition-colors"
-            style={{ textShadow: '0 0 8px rgba(0,229,255,0.3)' }}
-          >
-            VIEW TRENDS
-          </button>
-        )}
-      </div>
+      {/* Radar heatmap — 30% of available height */}
+      {showRadar && (
+        <div className="flex items-center justify-center" style={{ flex: '3 1 0%' }}>
+          <RadarChart values={kpis} size={180} />
+        </div>
+      )}
     </div>
   )
 }

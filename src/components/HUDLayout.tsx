@@ -6,12 +6,14 @@ interface HUDLayoutProps {
   commsFeed: ReactNode
   inputsPanel: ReactNode
   kpiPanel: ReactNode
+  trendsPanel: ReactNode
   children: ReactNode
   statusRef?: RefObject<HTMLDivElement | null>
   commsRef?: RefObject<HTMLDivElement | null>
   inputsRef?: RefObject<HTMLDivElement | null>
   mainRef?: RefObject<HTMLDivElement | null>
   kpiRef?: RefObject<HTMLDivElement | null>
+  trendsRef?: RefObject<HTMLDivElement | null>
 }
 
 export default function HUDLayout({
@@ -19,12 +21,14 @@ export default function HUDLayout({
   commsFeed,
   inputsPanel,
   kpiPanel,
+  trendsPanel,
   children,
   statusRef,
   commsRef,
   inputsRef,
   mainRef,
   kpiRef,
+  trendsRef,
 }: HUDLayoutProps) {
   return (
     <div className="hud-grid hud-frame">
@@ -57,6 +61,12 @@ export default function HUDLayout({
         <PanelFrame label="COMMS.FEED" sublabel="FREQ:142.8" />
         <div className="hud-panel-noise" />
         {commsFeed}
+      </div>
+
+      <div ref={trendsRef} className="hud-trends hud-panel hud-panel-scan">
+        <PanelFrame label="KPI.TREND" sublabel="ANALYSIS" />
+        <div className="hud-panel-noise" />
+        {trendsPanel}
       </div>
 
       <div ref={inputsRef} className="hud-inputs hud-panel hud-panel-scan">

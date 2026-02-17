@@ -190,7 +190,7 @@ body,
   grid-template-areas:
     "status  status    status"
     "comms   inputs    kpi"
-    "comms   scenarios kpi";
+    "trends  scenarios kpi";
   width: 100%;
   height: 100vh;
   position: relative;
@@ -204,6 +204,7 @@ body,
 .hud-inputs    { grid-area: inputs; }
 .hud-scenarios { grid-area: scenarios; }
 .hud-kpi       { grid-area: kpi; }
+.hud-trends    { grid-area: trends; }
 
 /* ── PANEL BASE — no clip-path, SVG PanelFrame handles decoration ── */
 .hud-panel {

@@ -11,7 +11,8 @@ import CommsFeed from './components/CommsFeed'
 import KPIPanel from './components/KPIPanel'
 import ResourceAllocator from './components/ResourceAllocator'
 import MainPanel from './components/MainPanel'
-import TrendOverlay, { TrendCharts } from './components/TrendOverlay'
+import TrendPanel from './components/TrendPanel'
+import { TrendCharts } from './components/TrendOverlay'
 import { TutorialPrompt, TutorialOverlay } from './components/TutorialOverlay'
 import { tutorialSteps } from './data/tutorialData'
 import { useResourceAllocator } from './hooks/useResourceAllocator'
@@ -75,7 +76,6 @@ export default function App() {
   const [showTutorialPrompt, setShowTutorialPrompt] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
   const [tutorialStep, setTutorialStep] = useState(0)
-  const [showTrends, setShowTrends] = useState(false)
   const impactKey = useRef(0)
 
   // Panel refs for tutorial spotlight
@@ -216,7 +216,6 @@ export default function App() {
     setCountdownMinutes(240)
     setShowTutorialPrompt(false)
     setShowTutorial(false)
-    setShowTrends(false)
     setTutorialStep(0)
     resource.reset()
     comms.clear()
@@ -325,10 +324,9 @@ export default function App() {
                   impacts={impacts}
                   impactKey={impactKey.current}
                   showRadar={true}
-                  history={history}
-                  onShowTrends={() => setShowTrends(true)}
                 />
               }
+              trendsPanel={<TrendPanel history={history} />}
             >
               <MainPanel
                 phase={phase}
@@ -491,13 +489,6 @@ export default function App() {
               </motion.button>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Trend overlay — full-screen KPI charts */}
-      <AnimatePresence>
-        {showTrends && (
-          <TrendOverlay history={history} onClose={() => setShowTrends(false)} />
         )}
       </AnimatePresence>
 
