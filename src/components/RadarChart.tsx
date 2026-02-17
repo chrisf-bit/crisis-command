@@ -38,22 +38,37 @@ export default function RadarChart({ values, size = 280, history }: RadarChartPr
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      {/* Grid */}
-      {rings.map((r) => (
-        <polygon
-          key={r}
-          points={keys
-            .map((_, i) => {
-              const angle = startAngle + i * angleStep
-              const radius = (r / 100) * maxR
-              return `${center + radius * Math.cos(angle)},${center + radius * Math.sin(angle)}`
-            })
-            .join(' ')}
-          fill="none"
-          stroke="rgba(255,255,255,0.06)"
-          strokeWidth="1"
-        />
-      ))}
+      {/* Grid rings with value labels */}
+      {rings.map((r) => {
+        const radius = (r / 100) * maxR
+        return (
+          <g key={r}>
+            <polygon
+              points={keys
+                .map((_, i) => {
+                  const angle = startAngle + i * angleStep
+                  return `${center + radius * Math.cos(angle)},${center + radius * Math.sin(angle)}`
+                })
+                .join(' ')}
+              fill="none"
+              stroke="rgba(255,255,255,0.06)"
+              strokeWidth="1"
+            />
+            {/* Ring value on top axis */}
+            <text
+              x={center + 4}
+              y={center - radius - 2}
+              fill="rgba(255,255,255,0.2)"
+              fontSize="9"
+              fontFamily="'Orbitron', sans-serif"
+              textAnchor="start"
+              dominantBaseline="auto"
+            >
+              {r}
+            </text>
+          </g>
+        )
+      })}
 
       {/* Axis lines */}
       {keys.map((_, i) => {
