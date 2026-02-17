@@ -45,7 +45,7 @@ export default function RadarChart({ values, size = 280, history }: RadarChartPr
     .join(' ')
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} overflow="visible">
       {/* Grid rings with value labels */}
       {rings.map((r) => {
         const radius = (r / 100) * maxR
