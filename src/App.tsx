@@ -9,8 +9,8 @@ import HUDLayout from './components/HUDLayout'
 import StatusBar from './components/StatusBar'
 import CommsFeed from './components/CommsFeed'
 import MetricsPanel from './components/MetricsPanel'
+import ResourceAllocator from './components/ResourceAllocator'
 import MainPanel from './components/MainPanel'
-import TrendPanel from './components/TrendPanel'
 import { TrendCharts } from './components/TrendOverlay'
 import { TutorialPrompt, TutorialOverlay } from './components/TutorialOverlay'
 import { tutorialSteps } from './data/tutorialData'
@@ -80,6 +80,7 @@ export default function App() {
   // Panel refs for tutorial spotlight
   const statusRef = useRef<HTMLDivElement>(null)
   const commsRef = useRef<HTMLDivElement>(null)
+  const inputsRef = useRef<HTMLDivElement>(null)
   const mainRef = useRef<HTMLDivElement>(null)
   const metricsRef = useRef<HTMLDivElement>(null)
 
@@ -295,6 +296,7 @@ export default function App() {
             <HUDLayout
               statusRef={statusRef}
               commsRef={commsRef}
+              inputsRef={inputsRef}
               mainRef={mainRef}
               metricsRef={metricsRef}
               statusBar={
@@ -307,18 +309,22 @@ export default function App() {
                 />
               }
               commsFeed={<CommsFeed messages={comms.messages} />}
-              metricsPanel={
-                <MetricsPanel
+              inputsPanel={
+                <ResourceAllocator
                   allocation={resource.allocation}
                   onAllocate={resource.handleSliderChange}
                   locked={resource.locked}
                   getMultiplier={resource.getMultiplier}
+                />
+              }
+              metricsPanel={
+                <MetricsPanel
                   kpis={kpis}
                   impacts={impacts}
                   impactKey={impactKey.current}
+                  history={history}
                 />
               }
-              trendsPanel={<TrendPanel history={history} />}
             >
               <MainPanel
                 phase={phase}
@@ -495,7 +501,7 @@ export default function App() {
       {showTutorial && (
         <TutorialOverlay
           step={tutorialStep}
-          panelRefs={{ status: statusRef, comms: commsRef, main: mainRef, metrics: metricsRef }}
+          panelRefs={{ status: statusRef, comms: commsRef, inputs: inputsRef, main: mainRef, metrics: metricsRef }}
           onNext={handleTutorialNext}
           onSkip={handleTutorialSkip}
         />

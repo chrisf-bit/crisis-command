@@ -6,6 +6,7 @@ import { tutorialSteps, type TutorialStep } from '../data/tutorialData'
 export type PanelRefs = {
   status: RefObject<HTMLDivElement | null>
   comms: RefObject<HTMLDivElement | null>
+  inputs: RefObject<HTMLDivElement | null>
   main: RefObject<HTMLDivElement | null>
   metrics: RefObject<HTMLDivElement | null>
 }

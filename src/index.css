@@ -188,9 +188,9 @@ body,
   grid-template-rows: 48px 1fr 1fr;
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-areas:
-    "status  status   status"
-    "comms   main     metrics"
-    "trends  main     metrics";
+    "status  status     status"
+    "comms   inputs     metrics"
+    "comms   scenarios  metrics";
   width: 100%;
   height: 100vh;
   position: relative;
@@ -201,9 +201,9 @@ body,
 
 .hud-status    { grid-area: status; }
 .hud-comms     { grid-area: comms; }
-.hud-main      { grid-area: main; }
+.hud-inputs    { grid-area: inputs; }
+.hud-scenarios { grid-area: scenarios; }
 .hud-metrics   { grid-area: metrics; }
-.hud-trends    { grid-area: trends; }
 
 /* ── PANEL BASE — no clip-path, SVG PanelFrame handles decoration ── */
 .hud-panel {
@@ -267,9 +267,9 @@ body,
 
 /* Stagger scan lines across panels */
 .hud-comms.hud-panel-scan::before      { animation-delay: 0s; }
-.hud-main.hud-panel-scan::before       { animation-delay: -1.5s; }
-.hud-metrics.hud-panel-scan::before    { animation-delay: -3s; }
-.hud-trends.hud-panel-scan::before     { animation-delay: -4.5s; }
+.hud-inputs.hud-panel-scan::before     { animation-delay: -1.5s; }
+.hud-scenarios.hud-panel-scan::before  { animation-delay: -3s; }
+.hud-metrics.hud-panel-scan::before    { animation-delay: -4.5s; }
 
 /* ── NOISE TEXTURE OVERLAY ── */
 .hud-panel-noise {
