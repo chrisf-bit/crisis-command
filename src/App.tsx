@@ -11,7 +11,7 @@ import CommsFeed from './components/CommsFeed'
 import KPIPanel from './components/KPIPanel'
 import ResourceAllocator from './components/ResourceAllocator'
 import MainPanel from './components/MainPanel'
-import TrendChart from './components/TrendChart'
+import TrendOverlay, { TrendCharts } from './components/TrendOverlay'
 import { TutorialPrompt, TutorialOverlay } from './components/TutorialOverlay'
 import { tutorialSteps } from './data/tutorialData'
 import { useResourceAllocator } from './hooks/useResourceAllocator'
@@ -75,6 +75,7 @@ export default function App() {
   const [showTutorialPrompt, setShowTutorialPrompt] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
   const [tutorialStep, setTutorialStep] = useState(0)
+  const [showTrends, setShowTrends] = useState(false)
   const impactKey = useRef(0)
 
   // Panel refs for tutorial spotlight
@@ -215,6 +216,7 @@ export default function App() {
     setCountdownMinutes(240)
     setShowTutorialPrompt(false)
     setShowTutorial(false)
+    setShowTrends(false)
     setTutorialStep(0)
     resource.reset()
     comms.clear()
@@ -324,6 +326,7 @@ export default function App() {
                   impactKey={impactKey.current}
                   showRadar={true}
                   history={history}
+                  onShowTrends={() => setShowTrends(true)}
                 />
               }
             >
@@ -413,13 +416,13 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Trend chart */}
+                {/* Trend charts — one per KPI */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.0, duration: 0.6 }}
                 >
-                  <TrendChart history={history} />
+                  <TrendCharts history={history} />
                 </motion.div>
               </div>
 
@@ -488,6 +491,13 @@ export default function App() {
               </motion.button>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Trend overlay — full-screen KPI charts */}
+      <AnimatePresence>
+        {showTrends && (
+          <TrendOverlay history={history} onClose={() => setShowTrends(false)} />
         )}
       </AnimatePresence>
 

@@ -1,7 +1,6 @@
 import KPIGauge from './KPIGauge'
 import FloatingNumber from './FloatingNumber'
 import RadarChart from './RadarChart'
-import MiniTrendChart from './MiniTrendChart'
 import { kpiMeta, type KPIValues, type KPIKey } from '../data/gameData'
 
 interface KPIPanelProps {
@@ -10,11 +9,12 @@ interface KPIPanelProps {
   impactKey: number
   showRadar?: boolean
   history?: KPIValues[]
+  onShowTrends?: () => void
 }
 
 const keys = Object.keys(kpiMeta) as KPIKey[]
 
-export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, history }: KPIPanelProps) {
+export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, history, onShowTrends }: KPIPanelProps) {
   const hasTrend = history && history.length > 1
 
   return (
@@ -30,10 +30,7 @@ export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, h
       </div>
 
       {/* Gauges */}
-      <div
-        className="flex flex-col items-center justify-center gap-1"
-        style={{ flex: hasTrend ? '5 1 0%' : '7 1 0%' }}
-      >
+      <div className="flex flex-col items-center justify-center gap-1" style={{ flex: '7 1 0%' }}>
         {keys.map((key) => (
           <div key={key} className="relative flex flex-col items-center">
             {impacts && impacts[key] !== 0 && (
@@ -54,16 +51,23 @@ export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, h
         ))}
       </div>
 
-      {/* Bottom section — trend chart (after round 1) or radar */}
-      {hasTrend ? (
-        <div className="flex items-center justify-center" style={{ flex: '5 1 0%' }}>
-          <MiniTrendChart history={history} />
-        </div>
-      ) : showRadar ? (
-        <div className="flex items-center justify-center" style={{ flex: '3 1 0%' }}>
-          <RadarChart values={kpis} size={180} />
-        </div>
-      ) : null}
+      {/* Bottom section — radar + trends button */}
+      <div className="flex flex-col items-center gap-2" style={{ flex: '3 1 0%' }}>
+        {showRadar && (
+          <div className="flex items-center justify-center flex-1">
+            <RadarChart values={kpis} size={160} />
+          </div>
+        )}
+        {hasTrend && onShowTrends && (
+          <button
+            onClick={onShowTrends}
+            className="px-4 py-1.5 rounded-md border border-cyan-glow/30 bg-cyan-glow/5 font-display text-[10px] tracking-[0.2em] uppercase text-cyan-glow cursor-pointer hover:bg-cyan-glow/15 transition-colors"
+            style={{ textShadow: '0 0 8px rgba(0,229,255,0.3)' }}
+          >
+            VIEW TRENDS
+          </button>
+        )}
+      </div>
     </div>
   )
 }
