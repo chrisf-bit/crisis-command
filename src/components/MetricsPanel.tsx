@@ -26,7 +26,7 @@ function KPIRow({ kpiKey, value, impact, impactKey }: {
   const animated = useAnimatedNumber(value)
 
   return (
-    <div className="flex items-center gap-2 px-3 py-1.5 relative">
+    <div className="flex items-center gap-3 px-3 py-2.5 relative">
       {/* Impact floating number */}
       {impact !== null && impact !== 0 && (
         <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-10" key={`impact-${kpiKey}-${impactKey}`}>
@@ -84,7 +84,7 @@ export default function MetricsPanel({ kpis, impacts, impactKey, history }: Metr
       </div>
 
       {/* KPI rows */}
-      <div className="flex flex-col flex-shrink-0 py-1 gap-0.5">
+      <div className="flex flex-col flex-shrink-0 py-2 gap-1">
         {keys.map((key) => (
           <KPIRow
             key={key}
