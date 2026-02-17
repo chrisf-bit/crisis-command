@@ -91,14 +91,14 @@ export default function MetricsPanel({ kpis, impacts, impactKey, history }: Metr
         ))}
       </div>
 
-      {/* Trend charts */}
-      <div className="flex-1 min-h-0">
+      {/* Trend charts — compact */}
+      <div className="min-h-0" style={{ flex: '3 1 0%' }}>
         <TrendPanel history={history} />
       </div>
 
-      {/* Radar heatmap */}
-      <div className="flex items-center justify-center py-1 flex-shrink-0">
-        <RadarChart values={kpis} size={140} />
+      {/* Radar heatmap — larger */}
+      <div className="flex items-center justify-center" style={{ flex: '4 1 0%' }}>
+        <RadarChart values={kpis} size={200} />
       </div>
     </div>
   )
