@@ -1,7 +1,7 @@
 import KPIGauge from './KPIGauge'
 import FloatingNumber from './FloatingNumber'
 import RadarChart from './RadarChart'
-import Sparkline from './Sparkline'
+import MiniTrendChart from './MiniTrendChart'
 import { kpiMeta, type KPIValues, type KPIKey } from '../data/gameData'
 
 interface KPIPanelProps {
@@ -15,6 +15,8 @@ interface KPIPanelProps {
 const keys = Object.keys(kpiMeta) as KPIKey[]
 
 export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, history }: KPIPanelProps) {
+  const hasTrend = history && history.length > 1
+
   return (
     <div className="flex flex-col items-center p-4 gap-2 h-full">
       {/* Header with extending line */}
@@ -27,8 +29,11 @@ export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, h
         </span>
       </div>
 
-      {/* Gauges — 70% of available height */}
-      <div className="flex flex-col items-center justify-center gap-1" style={{ flex: '7 1 0%' }}>
+      {/* Gauges */}
+      <div
+        className="flex flex-col items-center justify-center gap-1"
+        style={{ flex: hasTrend ? '5 1 0%' : '7 1 0%' }}
+      >
         {keys.map((key) => (
           <div key={key} className="relative flex flex-col items-center">
             {impacts && impacts[key] !== 0 && (
@@ -45,22 +50,20 @@ export default function KPIPanel({ kpis, impacts, impactKey, showRadar = true, h
               color={kpiMeta[key].color}
               size={120}
             />
-            {history && history.length > 1 && (
-              <Sparkline
-                data={history.map((h) => h[key])}
-                color={kpiMeta[key].color}
-              />
-            )}
           </div>
         ))}
       </div>
 
-      {/* Radar heatmap — 30% of available height */}
-      {showRadar && (
+      {/* Bottom section — trend chart (after round 1) or radar */}
+      {hasTrend ? (
+        <div className="flex items-center justify-center" style={{ flex: '5 1 0%' }}>
+          <MiniTrendChart history={history} />
+        </div>
+      ) : showRadar ? (
         <div className="flex items-center justify-center" style={{ flex: '3 1 0%' }}>
           <RadarChart values={kpis} size={180} />
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
