@@ -11,7 +11,6 @@ import CommsFeed from './components/CommsFeed'
 import KPIPanel from './components/KPIPanel'
 import ResourceAllocator from './components/ResourceAllocator'
 import MainPanel from './components/MainPanel'
-import TrendChart from './components/TrendChart'
 import { TutorialPrompt, TutorialOverlay } from './components/TutorialOverlay'
 import { tutorialSteps } from './data/tutorialData'
 import { useResourceAllocator } from './hooks/useResourceAllocator'
@@ -413,14 +412,7 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Trend chart */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.0, duration: 0.6 }}
-                >
-                  <TrendChart history={history} width={500} height={150} />
-                </motion.div>
+                {/* Trend chart — temporarily removed for deploy test */}
               </div>
 
               {/* Profile */}
