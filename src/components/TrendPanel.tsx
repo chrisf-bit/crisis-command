@@ -8,29 +8,6 @@ const keys = Object.keys(kpiMeta) as KPIKey[]
 const roundLabels = ['Start', 'R1', 'R2', 'R3']
 
 export default function TrendPanel({ history }: TrendPanelProps) {
-  if (history.length < 2) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full p-4 gap-2">
-        <div className="panel-header self-stretch">
-          <span
-            className="font-display text-[10px] font-bold tracking-[0.25em] uppercase flex-shrink-0"
-            style={{ color: '#00e5ff', textShadow: '0 0 8px rgba(0,229,255,0.4)' }}
-          >
-            TRENDS
-          </span>
-        </div>
-        <div className="flex-1 flex items-center justify-center">
-          <span
-            className="font-body text-xs tracking-wider"
-            style={{ color: 'rgba(224,230,240,0.25)' }}
-          >
-            Data available after Round 1
-          </span>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="flex flex-col h-full p-3 gap-1.5">
       {/* Header */}
@@ -64,14 +41,14 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
   const padR = 6
   const padT = 4
   const padB = 16
-  // Use viewBox for scaling — SVG stretches to fill container
   const vbW = 200
   const vbH = 100
   const chartW = vbW - padL - padR
   const chartH = vbH - padT - padB
 
+  // Always use 4-point scale (Start, R1, R2, R3) so chart doesn't jump around
   function getX(i: number): number {
-    return padL + (i / Math.max(data.length - 1, 1)) * chartW
+    return padL + (i / 3) * chartW
   }
 
   function getY(v: number): number {
@@ -79,8 +56,9 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
   }
 
   const points = data.map((v, i) => ({ x: getX(i), y: getY(v) }))
-  const lineD = `M ${points.map((p) => `${p.x},${p.y}`).join(' L ')}`
-  const areaD = `${lineD} L ${points[points.length - 1].x},${padT + chartH} L ${points[0].x},${padT + chartH} Z`
+  const hasLine = points.length > 1
+  const lineD = hasLine ? `M ${points.map((p) => `${p.x},${p.y}`).join(' L ')}` : ''
+  const areaD = hasLine ? `${lineD} L ${points[points.length - 1].x},${padT + chartH} L ${points[0].x},${padT + chartH} Z` : ''
 
   return (
     <div
@@ -105,16 +83,18 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
           >
             {current}
           </span>
-          <span
-            className="font-display text-[9px] font-bold leading-none"
-            style={{ color: delta >= 0 ? '#00e676' : '#ff1744' }}
-          >
-            {delta >= 0 ? '+' : ''}{delta}
-          </span>
+          {delta !== 0 && (
+            <span
+              className="font-display text-[9px] font-bold leading-none"
+              style={{ color: delta > 0 ? '#00e676' : '#ff1744' }}
+            >
+              {delta > 0 ? '+' : ''}{delta}
+            </span>
+          )}
         </div>
       </div>
 
-      {/* Chart — stretches to fill remaining space */}
+      {/* Chart */}
       <div className="flex-1 min-h-0 px-0.5 pb-0.5">
         <svg
           viewBox={`0 0 ${vbW} ${vbH}`}
@@ -147,33 +127,36 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
             </g>
           ))}
 
-          {/* X labels */}
-          {roundLabels.slice(0, data.length).map((label, i) => (
+          {/* All 4 X-axis labels — future ones faded */}
+          {roundLabels.map((label, i) => (
             <text
               key={i}
               x={getX(i)} y={vbH - 3} textAnchor="middle"
-              fill="rgba(224,230,240,0.4)" fontSize="7" fontFamily="'Rajdhani', sans-serif"
+              fill={i < data.length ? 'rgba(224,230,240,0.4)' : 'rgba(224,230,240,0.15)'}
+              fontSize="7" fontFamily="'Rajdhani', sans-serif"
               fontWeight="600"
             >
               {label}
             </text>
           ))}
 
-          {/* Area */}
-          <path d={areaD} fill={`url(#panel-grad-${kpiKey})`} />
+          {/* Area fill (only when we have a line) */}
+          {hasLine && <path d={areaD} fill={`url(#panel-grad-${kpiKey})`} />}
 
-          {/* Line */}
-          <path
-            d={lineD}
-            fill="none"
-            stroke={meta.color}
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{ filter: `drop-shadow(0 0 3px ${meta.color})` }}
-          />
+          {/* Line (only when 2+ points) */}
+          {hasLine && (
+            <path
+              d={lineD}
+              fill="none"
+              stroke={meta.color}
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ filter: `drop-shadow(0 0 3px ${meta.color})` }}
+            />
+          )}
 
-          {/* Dots with values */}
+          {/* Data dots with values */}
           {points.map((p, i) => (
             <g key={i}>
               <circle
