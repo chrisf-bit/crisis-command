@@ -1,6 +1,6 @@
 export interface TutorialStep {
   /** Which HUD panel ref to spotlight (null = center screen, no target) */
-  target: 'status' | 'comms' | 'inputs' | 'main' | 'kpi' | null
+  target: 'status' | 'comms' | 'main' | 'metrics' | null
   title: string
   description: string
   icon: string
@@ -20,10 +20,10 @@ export const tutorialSteps: TutorialStep[] = [
     description: 'Incoming intel, alerts, and outcomes from your team.',
   },
   {
-    target: 'inputs',
-    title: 'Power Allocation',
+    target: 'metrics',
+    title: 'Budget Allocation',
     icon: '⚡',
-    description: 'Drag dials to focus resources — higher allocation amplifies impact.',
+    description: 'Split your crisis budget across four channels. More budget = bigger impact, but others lose out.',
   },
   {
     target: 'main',
@@ -32,13 +32,13 @@ export const tutorialSteps: TutorialStep[] = [
     description: 'Read briefings, choose responses, and see consequences unfold.',
   },
   {
-    target: 'kpi',
+    target: 'metrics',
     title: 'System Metrics',
     icon: '📊',
-    description: 'Four KPIs track organisational health. Watch for impact numbers.',
+    description: 'KPI values update in real time next to each channel dial. Watch for impact numbers.',
   },
   {
-    target: 'inputs',
+    target: 'metrics',
     title: 'Resource Strategy',
     icon: '🔗',
     description: 'IT → Regulatory, Comms → Reputation, Ops → Revenue, People → Morale.',

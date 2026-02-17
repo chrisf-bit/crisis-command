@@ -4,30 +4,26 @@ import PanelFrame from './hud/PanelFrame'
 interface HUDLayoutProps {
   statusBar: ReactNode
   commsFeed: ReactNode
-  inputsPanel: ReactNode
-  kpiPanel: ReactNode
+  metricsPanel: ReactNode
   trendsPanel: ReactNode
   children: ReactNode
   statusRef?: RefObject<HTMLDivElement | null>
   commsRef?: RefObject<HTMLDivElement | null>
-  inputsRef?: RefObject<HTMLDivElement | null>
   mainRef?: RefObject<HTMLDivElement | null>
-  kpiRef?: RefObject<HTMLDivElement | null>
+  metricsRef?: RefObject<HTMLDivElement | null>
   trendsRef?: RefObject<HTMLDivElement | null>
 }
 
 export default function HUDLayout({
   statusBar,
   commsFeed,
-  inputsPanel,
-  kpiPanel,
+  metricsPanel,
   trendsPanel,
   children,
   statusRef,
   commsRef,
-  inputsRef,
   mainRef,
-  kpiRef,
+  metricsRef,
   trendsRef,
 }: HUDLayoutProps) {
   return (
@@ -69,22 +65,16 @@ export default function HUDLayout({
         {trendsPanel}
       </div>
 
-      <div ref={inputsRef} className="hud-inputs hud-panel hud-panel-scan">
-        <PanelFrame label="PWR.ALLOC" sublabel="BUDGET:100" />
-        <div className="hud-panel-noise" />
-        {inputsPanel}
-      </div>
-
-      <div ref={mainRef} className="hud-scenarios hud-panel hud-panel-scan">
+      <div ref={mainRef} className="hud-main hud-panel hud-panel-scan">
         <PanelFrame label="MAIN.DISPLAY" sublabel="RES:1920x1080" />
         <div className="hud-panel-noise" />
         {children}
       </div>
 
-      <div ref={kpiRef} className="hud-kpi hud-panel hud-panel-scan">
-        <PanelFrame label="SYS.METRICS" sublabel="UPTIME:99.7%" />
+      <div ref={metricsRef} className="hud-metrics hud-panel hud-panel-scan">
+        <PanelFrame label="SYS.METRICS" sublabel="BUDGET:100" />
         <div className="hud-panel-noise" />
-        {kpiPanel}
+        {metricsPanel}
       </div>
     </div>
   )

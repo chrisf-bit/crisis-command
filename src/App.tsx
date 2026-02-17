@@ -8,8 +8,7 @@ import RadarChart from './components/RadarChart'
 import HUDLayout from './components/HUDLayout'
 import StatusBar from './components/StatusBar'
 import CommsFeed from './components/CommsFeed'
-import KPIPanel from './components/KPIPanel'
-import ResourceAllocator from './components/ResourceAllocator'
+import MetricsPanel from './components/MetricsPanel'
 import MainPanel from './components/MainPanel'
 import TrendPanel from './components/TrendPanel'
 import { TrendCharts } from './components/TrendOverlay'
@@ -81,9 +80,8 @@ export default function App() {
   // Panel refs for tutorial spotlight
   const statusRef = useRef<HTMLDivElement>(null)
   const commsRef = useRef<HTMLDivElement>(null)
-  const inputsRef = useRef<HTMLDivElement>(null)
   const mainRef = useRef<HTMLDivElement>(null)
-  const kpiRef = useRef<HTMLDivElement>(null)
+  const metricsRef = useRef<HTMLDivElement>(null)
 
   const resource = useResourceAllocator()
   const comms = useCommsFeed()
@@ -297,9 +295,8 @@ export default function App() {
             <HUDLayout
               statusRef={statusRef}
               commsRef={commsRef}
-              inputsRef={inputsRef}
               mainRef={mainRef}
-              kpiRef={kpiRef}
+              metricsRef={metricsRef}
               statusBar={
                 <StatusBar
                   round={currentRound.id}
@@ -310,20 +307,15 @@ export default function App() {
                 />
               }
               commsFeed={<CommsFeed messages={comms.messages} />}
-              inputsPanel={
-                <ResourceAllocator
+              metricsPanel={
+                <MetricsPanel
                   allocation={resource.allocation}
                   onAllocate={resource.handleSliderChange}
                   locked={resource.locked}
                   getMultiplier={resource.getMultiplier}
-                />
-              }
-              kpiPanel={
-                <KPIPanel
                   kpis={kpis}
                   impacts={impacts}
                   impactKey={impactKey.current}
-                  showRadar={true}
                 />
               }
               trendsPanel={<TrendPanel history={history} />}
@@ -503,7 +495,7 @@ export default function App() {
       {showTutorial && (
         <TutorialOverlay
           step={tutorialStep}
-          panelRefs={{ status: statusRef, comms: commsRef, inputs: inputsRef, main: mainRef, kpi: kpiRef }}
+          panelRefs={{ status: statusRef, comms: commsRef, main: mainRef, metrics: metricsRef }}
           onNext={handleTutorialNext}
           onSkip={handleTutorialSkip}
         />
