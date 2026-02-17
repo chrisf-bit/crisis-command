@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react'
 import type { KPIValues } from '../data/gameData'
 import { kpiMeta, type KPIKey } from '../data/gameData'
 
+// Short labels for radar axes (full labels are too long and get clipped)
+const radarLabels: Record<KPIKey, string> = {
+  reputation: 'Reputation',
+  revenue: 'Revenue',
+  morale: 'Morale',
+  regulatory: 'Regulatory',
+}
+
 interface RadarChartProps {
   values: KPIValues
   size?: number
@@ -11,7 +19,7 @@ interface RadarChartProps {
 export default function RadarChart({ values, size = 280, history }: RadarChartProps) {
   const [scale, setScale] = useState(0)
   const center = size / 2
-  const maxR = size / 2 - 40
+  const maxR = size / 2 - 26
   const keys = Object.keys(kpiMeta) as KPIKey[]
   const angleStep = (2 * Math.PI) / keys.length
   const startAngle = -Math.PI / 2
@@ -56,10 +64,10 @@ export default function RadarChart({ values, size = 280, history }: RadarChartPr
             />
             {/* Ring value on top axis */}
             <text
-              x={center + 4}
+              x={center + 5}
               y={center - radius - 2}
-              fill="rgba(255,255,255,0.2)"
-              fontSize="9"
+              fill="rgba(255,255,255,0.35)"
+              fontSize="10"
               fontFamily="'Orbitron', sans-serif"
               textAnchor="start"
               dominantBaseline="auto"
@@ -137,10 +145,10 @@ export default function RadarChart({ values, size = 280, history }: RadarChartPr
         )
       })}
 
-      {/* Labels */}
+      {/* Axis labels */}
       {keys.map((key, i) => {
         const angle = startAngle + i * angleStep
-        const labelR = maxR + 24
+        const labelR = maxR + 18
         const lx = center + labelR * Math.cos(angle)
         const ly = center + labelR * Math.sin(angle)
         return (
@@ -151,11 +159,11 @@ export default function RadarChart({ values, size = 280, history }: RadarChartPr
             textAnchor="middle"
             dominantBaseline="middle"
             fill={kpiMeta[key].color}
-            fontSize="11"
+            fontSize="14"
             fontFamily="'Rajdhani', sans-serif"
-            fontWeight="600"
+            fontWeight="700"
           >
-            {kpiMeta[key].label}
+            {radarLabels[key]}
           </text>
         )
       })}
