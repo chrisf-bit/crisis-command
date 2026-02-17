@@ -26,7 +26,7 @@ function KPIRow({ kpiKey, value, impact, impactKey }: {
   const animated = useAnimatedNumber(value)
 
   return (
-    <div className="flex items-center gap-2 px-2 py-1 relative">
+    <div className="flex items-center gap-2 px-3 py-1.5 relative">
       {/* Impact floating number */}
       {impact !== null && impact !== 0 && (
         <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-10" key={`impact-${kpiKey}-${impactKey}`}>
@@ -39,14 +39,14 @@ function KPIRow({ kpiKey, value, impact, impactKey }: {
 
       {/* KPI label */}
       <span
-        className="font-heading text-xs font-semibold tracking-wider uppercase flex-1"
+        className="font-heading text-sm font-semibold tracking-wider uppercase flex-1"
         style={{ color: `${meta.color}99` }}
       >
         {meta.label}
       </span>
 
       {/* Mini bar */}
-      <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+      <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
         <div
           className="h-full rounded-full transition-all duration-1000"
           style={{
@@ -59,7 +59,7 @@ function KPIRow({ kpiKey, value, impact, impactKey }: {
 
       {/* Value */}
       <span
-        className="font-display text-base font-black w-8 text-right leading-none"
+        className="font-display text-lg font-black w-9 text-right leading-none"
         style={{ color: meta.color, textShadow: `0 0 6px ${meta.color}44` }}
       >
         {animated}
@@ -84,7 +84,7 @@ export default function MetricsPanel({ kpis, impacts, impactKey, history }: Metr
       </div>
 
       {/* KPI rows */}
-      <div className="flex flex-col flex-shrink-0">
+      <div className="flex flex-col flex-shrink-0 py-1 gap-0.5">
         {keys.map((key) => (
           <KPIRow
             key={key}
@@ -127,11 +127,15 @@ export default function MetricsPanel({ kpis, impacts, impactKey, history }: Metr
       {/* Tab content — fills remaining space */}
       <div className="flex-1 min-h-0">
         {tab === 'radar' ? (
-          <div className="flex items-center justify-center h-full">
+          <div className="flex items-end justify-center h-full pb-4">
             <RadarChart values={kpis} size={280} />
           </div>
         ) : (
-          <TrendPanel history={history} />
+          <div className="h-full flex items-end pb-2">
+            <div className="w-full" style={{ height: '85%' }}>
+              <TrendPanel history={history} />
+            </div>
+          </div>
         )}
       </div>
     </div>
