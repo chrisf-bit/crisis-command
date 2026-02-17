@@ -35,7 +35,7 @@ export const tutorialSteps: TutorialStep[] = [
     target: 'metrics',
     title: 'System Metrics',
     icon: '📊',
-    description: 'KPI values update in real time next to each channel dial. Watch for impact numbers.',
+    description: 'KPI values update in real time. Switch between RADAR and TRENDS tabs to see overall health or track changes over time.',
   },
   {
     target: 'inputs',

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import FloatingNumber from './FloatingNumber'
 import RadarChart from './RadarChart'
 import TrendPanel from './TrendPanel'
@@ -12,6 +13,8 @@ interface MetricsPanelProps {
 }
 
 const keys = Object.keys(kpiMeta) as KPIKey[]
+
+type MetricsTab = 'radar' | 'trends'
 
 function KPIRow({ kpiKey, value, impact, impactKey }: {
   kpiKey: KPIKey
@@ -66,6 +69,8 @@ function KPIRow({ kpiKey, value, impact, impactKey }: {
 }
 
 export default function MetricsPanel({ kpis, impacts, impactKey, history }: MetricsPanelProps) {
+  const [tab, setTab] = useState<MetricsTab>('radar')
+
   return (
     <div className="flex flex-col h-full w-full relative z-[1]">
       {/* Header */}
@@ -91,14 +96,43 @@ export default function MetricsPanel({ kpis, impacts, impactKey, history }: Metr
         ))}
       </div>
 
-      {/* Trend charts */}
-      <div className="min-h-0" style={{ flex: '3 1 0%' }}>
-        <TrendPanel history={history} />
+      {/* Tab switcher */}
+      <div className="flex items-center gap-1 px-3 pt-2 pb-1 flex-shrink-0">
+        <button
+          onClick={() => setTab('radar')}
+          className="px-3 py-1 rounded font-display text-[10px] font-bold tracking-[0.2em] uppercase cursor-pointer transition-all duration-200"
+          style={{
+            color: tab === 'radar' ? '#00e5ff' : 'rgba(224,230,240,0.3)',
+            background: tab === 'radar' ? 'rgba(0,229,255,0.1)' : 'transparent',
+            border: `1px solid ${tab === 'radar' ? 'rgba(0,229,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
+            textShadow: tab === 'radar' ? '0 0 8px rgba(0,229,255,0.3)' : 'none',
+          }}
+        >
+          RADAR
+        </button>
+        <button
+          onClick={() => setTab('trends')}
+          className="px-3 py-1 rounded font-display text-[10px] font-bold tracking-[0.2em] uppercase cursor-pointer transition-all duration-200"
+          style={{
+            color: tab === 'trends' ? '#00e5ff' : 'rgba(224,230,240,0.3)',
+            background: tab === 'trends' ? 'rgba(0,229,255,0.1)' : 'transparent',
+            border: `1px solid ${tab === 'trends' ? 'rgba(0,229,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
+            textShadow: tab === 'trends' ? '0 0 8px rgba(0,229,255,0.3)' : 'none',
+          }}
+        >
+          TRENDS
+        </button>
       </div>
 
-      {/* Radar heatmap */}
-      <div className="flex items-center justify-center" style={{ flex: '4 1 0%' }}>
-        <RadarChart values={kpis} size={260} />
+      {/* Tab content — fills remaining space */}
+      <div className="flex-1 min-h-0">
+        {tab === 'radar' ? (
+          <div className="flex items-center justify-center h-full">
+            <RadarChart values={kpis} size={280} />
+          </div>
+        ) : (
+          <TrendPanel history={history} />
+        )}
       </div>
     </div>
   )
