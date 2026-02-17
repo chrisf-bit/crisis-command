@@ -37,10 +37,10 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
   const start = data[0]
   const delta = current - start
 
-  const padL = 24
-  const padR = 6
-  const padT = 4
-  const padB = 16
+  const padL = 28
+  const padR = 8
+  const padT = 6
+  const padB = 18
   const vbW = 200
   const vbH = 100
   const chartW = vbW - padL - padR
@@ -69,23 +69,23 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
       }}
     >
       {/* Header row */}
-      <div className="flex items-center justify-between px-2 py-0.5 flex-shrink-0" style={{ borderBottom: `1px solid ${meta.color}15` }}>
+      <div className="flex items-center justify-between px-2 py-1 flex-shrink-0" style={{ borderBottom: `1px solid ${meta.color}15` }}>
         <span
-          className="font-display text-[9px] font-bold tracking-[0.12em] uppercase"
+          className="font-display text-[11px] font-bold tracking-[0.12em] uppercase"
           style={{ color: meta.color }}
         >
           {meta.label}
         </span>
         <div className="flex items-center gap-1.5">
           <span
-            className="font-display text-sm font-black leading-none"
+            className="font-display text-base font-black leading-none"
             style={{ color: meta.color, textShadow: `0 0 6px ${meta.color}44` }}
           >
             {current}
           </span>
           {delta !== 0 && (
             <span
-              className="font-display text-[9px] font-bold leading-none"
+              className="font-display text-[11px] font-bold leading-none"
               style={{ color: delta > 0 ? '#00e676' : '#ff1744' }}
             >
               {delta > 0 ? '+' : ''}{delta}
@@ -118,8 +118,8 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
                 strokeDasharray="2 4"
               />
               <text
-                x={padL - 3} y={getY(v)} textAnchor="end" dominantBaseline="middle"
-                fill="rgba(224,230,240,0.3)" fontSize="7" fontFamily="'Rajdhani', sans-serif"
+                x={padL - 4} y={getY(v)} textAnchor="end" dominantBaseline="middle"
+                fill="rgba(224,230,240,0.35)" fontSize="10" fontFamily="'Rajdhani', sans-serif"
                 fontWeight="600"
               >
                 {v}
@@ -132,9 +132,9 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
             <text
               key={i}
               x={getX(i)} y={vbH - 3} textAnchor="middle"
-              fill={i < data.length ? 'rgba(224,230,240,0.4)' : 'rgba(224,230,240,0.15)'}
-              fontSize="7" fontFamily="'Rajdhani', sans-serif"
-              fontWeight="600"
+              fill={i < data.length ? 'rgba(224,230,240,0.5)' : 'rgba(224,230,240,0.15)'}
+              fontSize="10" fontFamily="'Rajdhani', sans-serif"
+              fontWeight="700"
             >
               {label}
             </text>
@@ -160,14 +160,14 @@ function PanelChart({ kpiKey, history }: { kpiKey: KPIKey; history: KPIValues[] 
           {points.map((p, i) => (
             <g key={i}>
               <circle
-                cx={p.x} cy={p.y} r={i === points.length - 1 ? 2.5 : 1.5}
+                cx={p.x} cy={p.y} r={i === points.length - 1 ? 3 : 2}
                 fill={meta.color}
                 style={{ filter: `drop-shadow(0 0 2px ${meta.color})` }}
               />
               <text
-                x={p.x} y={p.y - 5} textAnchor="middle"
-                fill={meta.color} fontSize="6" fontFamily="'Rajdhani', sans-serif"
-                fontWeight="700" opacity="0.7"
+                x={p.x} y={p.y - 6} textAnchor="middle"
+                fill={meta.color} fontSize="9" fontFamily="'Rajdhani', sans-serif"
+                fontWeight="700" opacity="0.8"
               >
                 {data[i]}
               </text>
