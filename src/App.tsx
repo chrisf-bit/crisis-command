@@ -315,6 +315,7 @@ export default function App() {
                   onAllocate={resource.handleSliderChange}
                   locked={resource.locked}
                   getMultiplier={resource.getMultiplier}
+                  budgetRemaining={resource.budgetRemaining}
                 />
               }
               metricsPanel={

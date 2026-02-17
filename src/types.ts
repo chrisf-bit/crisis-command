@@ -25,10 +25,8 @@ export const CHANNEL_META: Record<ResourceChannel, { label: string; icon: string
 }
 
 export const RESOURCE_CHANNELS: ResourceChannel[] = ['it', 'comms', 'ops', 'people']
-export const TOTAL_BUDGET = 100
-export const MIN_ALLOCATION = 5
-export const MAX_ALLOCATION = 85 // 100 - 3 * MIN_ALLOCATION
-export const DEFAULT_ALLOCATION: ResourceAllocation = { it: 25, comms: 25, ops: 25, people: 25 }
+export const TOTAL_BUDGET = 200
+export const DEFAULT_ALLOCATION: ResourceAllocation = { it: 50, comms: 50, ops: 50, people: 50 }
 
 // ── Comms Feed ──
 export type CommMessageType = 'alert' | 'intel' | 'outcome' | 'system'

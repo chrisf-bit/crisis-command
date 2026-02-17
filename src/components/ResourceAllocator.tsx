@@ -8,6 +8,7 @@ interface ResourceAllocatorProps {
   onAllocate: (channel: ResourceChannel, value: number) => void
   locked: boolean
   getMultiplier: (channel: ResourceChannel) => number
+  budgetRemaining: number
 }
 
 // ── Arc geometry ──
@@ -235,7 +236,14 @@ export default function ResourceAllocator({
   onAllocate,
   locked,
   getMultiplier,
+  budgetRemaining,
 }: ResourceAllocatorProps) {
+  const pct = ((TOTAL_BUDGET - budgetRemaining) / TOTAL_BUDGET) * 100
+  const isLow = budgetRemaining <= 20
+  const barColor = isLow
+    ? 'linear-gradient(90deg, #ff1744, #ff6333)'
+    : 'linear-gradient(90deg, #00e5ff, #00e676)'
+
   return (
     <div className="flex flex-col items-center justify-center h-full w-full px-4 py-3 gap-2 relative z-[1]">
       {/* Budget header */}
@@ -245,23 +253,23 @@ export default function ResourceAllocator({
           className="font-display text-xs font-bold tracking-[0.25em] uppercase flex-shrink-0"
           style={{ color: locked ? 'rgba(255,23,68,0.5)' : 'rgba(0,229,255,0.7)' }}
         >
-          {locked ? '● ALLOCATION LOCKED' : 'CRISIS BUDGET'}
+          {locked ? '● LOCKED' : 'BUDGET'}
         </span>
         <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
           <div
-            className="h-full rounded-full"
+            className="h-full rounded-full transition-all duration-300"
             style={{
-              width: '100%',
-              background: 'linear-gradient(90deg, #00e5ff, #00e676)',
-              boxShadow: '0 0 6px rgba(0,229,255,0.4)',
+              width: `${100 - pct}%`,
+              background: barColor,
+              boxShadow: isLow ? '0 0 6px rgba(255,23,68,0.4)' : '0 0 6px rgba(0,229,255,0.4)',
             }}
           />
         </div>
         <span
-          className="font-display text-[10px] font-bold"
-          style={{ color: 'rgba(0,229,255,0.5)' }}
+          className="font-display text-[10px] font-bold tabular-nums"
+          style={{ color: isLow ? '#ff1744' : 'rgba(0,229,255,0.5)' }}
         >
-          {TOTAL_BUDGET}
+          {budgetRemaining}
         </span>
       </div>
 
@@ -285,7 +293,7 @@ export default function ResourceAllocator({
           className="font-body text-xs text-center"
           style={{ color: 'rgba(224,230,240,0.3)' }}
         >
-          Drag to redistribute — others adjust automatically
+          Drag dials to allocate — budget shared across all channels
         </span>
       )}
     </div>
